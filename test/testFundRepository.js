@@ -25,7 +25,8 @@ describe('FundRepository', function () {
 		assert.equal(r.size(), 3)
 	})
 	it('should return the correct fund', function() {
-		fund = r.get(fund0.name)
+		console.log("Fund name: " + fund0.name)
+		fund = r.find(fund0.name)
 		assert.equal(fund.name, fund0.name)
 	})
 	it('should contain 2 funds after removal of 1', function() {
