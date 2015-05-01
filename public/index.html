@@ -6,7 +6,7 @@
 <head>
     <!-- META -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+    <meta name="viewport" content="initial-scale=1"><!-- Optimize mobile viewport -->
 
     <title>Node/Angular Todo App</title>
 
@@ -16,32 +16,45 @@
         html                    { overflow-y:scroll; }
         body                    { padding-top:50px; }
         #todo-list              { margin-bottom:30px; }
+	.selected  		{ background-color: blue; }
     </style>
 
     <!-- SPELLS -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
     <script src="mainController.js"></script>
+    <script src="js/angular-locale_nl.js"></script>
 
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
 <body ng-controller="mainController">
     <div class="container">
 
-        <!-- HEADER AND TODO COUNT -->
         <div class="jumbotron text-center">
             <h1>All the funds I own <span class="label label-info">{{ funds.length }}</span></h1>
         </div>
 
 	<div id="fund-list" class="row">
-	    <div class="col-sm-4 col-sm-offset-4">
-		
-		<div ng-repeat="fund in funds">
-			<label>
-				{{fund.name}}
-			</label>
-		</div>
-	    </div>
+	    <table><td><table class="table table-hover">
+	    <tr ng-repeat="fund in funds" ng-click="setSelectedFund()">
+	       	     <td><label>{{fund.name}}</label></td>
+	    	</tr></table></td>
+	    <td style="vertical-align:top"><table class="table table-bordered">
+	    <tr>
+		<th>Date</th>
+		<th>Type</th>
+		<th>Amount</th>
+		<th>Price</th>
+		<th>Cost</th>
+	    </tr>
+	    <tr ng-repeat="transaction in transactions">
+		<td>{{transaction.timestamp | date:'d MMMM yyyy' }}</td>
+		<td>{{transaction.type}}</td>
+		<td>{{transaction.amount}}</td>
+		<td>{{transaction.price | currency : "&euro; "}}</td>
+		<td>{{transaction.cost | currency : "&euro; "}}</td>
+	    </tr></table>
+	    </td></table> 
 	</div>
         <!-- FORM TO CREATE TODOS -->
         <div id="todo-form" class="row">
@@ -49,15 +62,13 @@
                 <form>
                     <div class="form-group">
 
-                        <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                        <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.text">
-                    </div>
-
                     <!-- createToDo() WILL CREATE NEW TODOS -->
                     <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
+		    <button type="submit" class="btn btn-primary btn-lg" ng-click="getTransactionsForFund(1)">Do</button>
                 </form>
             </div>
-        </div>
+	</div></td>
+	</tr></table>
 
     </div>
 
