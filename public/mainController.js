@@ -1,5 +1,4 @@
 var myTodo = angular.module('myTodo', []);
-//var acls = require('../app/FundTransactionACL');
 
 function mainController($scope, $http) {
     $scope.formData = {};

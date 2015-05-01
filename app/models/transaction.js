@@ -5,7 +5,7 @@ var mongoose = require('mongoose'), Schema = mongoose.Schema;
 
 var transactionSchema = new Schema({
     orig_key : Number,
-    timestamp : String,
+    timestamp : Date,
     amount : Number,
     cost : Number,
     type : Number,

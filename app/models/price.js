@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 
 module.exports = mongoose.model('Price', {
     orig_key : Number,
-    timestamp : String,
+    timestamp : Date,
     value : Number,
     fund_id : Number
 });
