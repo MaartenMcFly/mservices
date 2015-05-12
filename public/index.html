@@ -2,7 +2,7 @@
 <!doctype html>
 
 <!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="myTodo">
+<html ng-app="fluxable.funds">
 <head>
     <!-- META -->
     <meta charset="utf-8">
@@ -11,35 +11,55 @@
     <title>Node/Angular Todo App</title>
 
     <!-- SCROLLS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
-    <style>
-        html                    { overflow-y:scroll; }
-        body                    { padding-top:50px; }
-        #todo-list              { margin-bottom:30px; }
-	.selected  		{ background-color: blue; }
-    </style>
-
-    <!-- SPELLS -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
-    <script src="mainController.js"></script>
-    <script src="js/angular-locale_nl.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
 
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
-<body ng-controller="mainController">
-    <div class="container">
+<body>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+    <script type="text/javascript" src="mainController.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.js"></script>
 
-        <div class="jumbotron text-center">
-            <h1>All the funds I own <span class="label label-info">{{ funds.length }}</span></h1>
-        </div>
-
-	<div id="fund-list" class="row">
-	    <table><td><table class="table table-hover">
+    <div layout="column" layout-align="left" layout-margin ng-controller="mainController">
+	<div>
+	    <md-content>
+		<md-list>
+		    <md-list-item class="md-3-line" ng-repeat="fund in funds">
+			    <md-button class="md-primary" ng-click="setSelectedFund()">
+			    	{{fund.name}}
+			    </md-button>	
+			    <md-divider></md-divider>
+		    </md-list-item>
+		</md-list>
+	    </md-content>
+	</div>
+        <div>
+	    <md-content>
+		<md-list>
+		    <md-list-item class="md-2-line" ng-repeat="transaction in transactions">
+			<div class="md-list-items-text">
+			    <p> {{transaction.timestamp | date:'d MMMM yyyy' }}</p>
+			</div>
+		    </md-list-item>
+		</md-list>
+	    </md-content>
+	</div>
+	<!--<div id="fund-list" class="row">
+	    <table><td style="vertical-align:top"><table class="table table-hover">
 	    <tr ng-repeat="fund in funds" ng-click="setSelectedFund()">
 	       	     <td><label>{{fund.name}}</label></td>
 	    	</tr></table></td>
-	    <td style="vertical-align:top"><table class="table table-bordered">
+	    <td style="vertical-align:top">
+		 <div class-"col-sm-8 col-sm-offset-2 text-right">
+                    <form>
+                        <div class="form-group">
+                            <button ng-controller="transactionEditorController" type="submit" class="btn btn-primary btn-lg" ng-click="open()">Add transaction</button>
+                        </div>
+                    </form>
+                </div>
+	    <table class="table table-bordered">
 	    <tr>
 		<th>Date</th>
 		<th>Type</th>
@@ -53,24 +73,17 @@
 		<td>{{transaction.amount}}</td>
 		<td>{{transaction.price | currency : "&euro; "}}</td>
 		<td>{{transaction.cost | currency : "&euro; "}}</td>
-	    </tr></table>
+	    </tr>
+	    <tr>
+		<td>{{selectedPosition.lastpricedate | date:'d MMMM yyyy'}}</td>
+		<td/>
+		<td>{{selectedPosition.amount}}</td>
+		<td>{{selectedPosition.value |currency : "&euro; " }}</td>
+		<td/>
+	    </tr>
+	    </table>
 	    </td></table> 
-	</div>
-        <!-- FORM TO CREATE TODOS -->
-        <div id="todo-form" class="row">
-            <div class="col-sm-8 col-sm-offset-2 text-center">
-                <form>
-                    <div class="form-group">
-
-                    <!-- createToDo() WILL CREATE NEW TODOS -->
-                    <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
-		    <button type="submit" class="btn btn-primary btn-lg" ng-click="getTransactionsForFund(1)">Do</button>
-                </form>
-            </div>
-	</div></td>
-	</tr></table>
-
+	</div>-->
     </div>
-
-</body>
+    </body>
 </html>

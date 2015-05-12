@@ -1,13 +1,51 @@
-var myTodo = angular.module('myTodo', []);
+var myTodo = angular.module('fluxable.funds',['ngMaterial']);// ['ui.bootstrap', 'ui.bootstrap.tpls']);
 
-function mainController($scope, $http) {
+myTodo.controller('transactionEditorContent', function ($scope, $modalInstance) {
+  console.log('transactionEditorContent controllor registered');
+
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
+
+
+myTodo.controller('transactionEditorController', function ($scope, $modal, $log) { 
+    $scope.animationsEnabled = true;
+    $scope.open = function (size) {
+	var modalInstance = $modal.open({	
+	    templateUrl : '/public/TransactionEditorContent.html',
+	    size : size,
+	    controller : 'transactionEditorContent',
+	    resolve: {
+		    items: function() {
+	    	        console.log('Resolve!!!');
+			return [];
+		    }
+	    	}
+	    });
+
+	modalInstance.result.then(function () {
+	    console.log('Result.then!!!');
+	}, function () {
+	   $log.info('Model dismissed!');
+	});
+    };
+
+    $scope.toggleAnimation = function () {
+	$scope.animationsEnabled = !$scope.animationsEnabled;
+    };
+});
+
+myTodo.controller('mainController', function ($scope, $http) {
     $scope.formData = {};
     $scope.selectedRow = null;
-
     $http.get('/api/funds')
 	.success(function(data) {
 	    $scope.funds = data;
-	    console.log(data);
 	})
 	.error(function(data) {
 	    console.log('Error: ' + data);
@@ -53,10 +91,12 @@ function mainController($scope, $http) {
     $scope.setSelectedFund = function() {
 	$scope.selectedFund = this.fund;
         var position_id;
-
- 	$http.get('/api/positions?fund_id=' + this.fund.orig_key)
+	var date = new Date();
+	date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+ 	$http.get('/api/positions?fund_id=' + this.fund.orig_key + '&todate=' + date)
 	    .then(function(res) {
-		$http.get('/api/transactions?position_id=' + res.data[0].orig_key)
+		$scope.selectedPosition = res.data[0];
+		$http.get('/api/transactions?position_id=' + $scope.selectedPosition.orig_key)
 		    .success(function(data) {
 			$scope.transactions = data;
 		    })
@@ -65,4 +105,4 @@ function mainController($scope, $http) {
 		    });
 	    });
     };
-}
+});
