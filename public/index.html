@@ -10,8 +10,15 @@
 
     <title>Node/Angular Todo App</title>
 
+    <style>
+	div.padded {
+	    padding: 10px;
+	}
+    </style>
+
     <!-- SCROLLS -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
+    <link rel="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
 
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
@@ -21,20 +28,37 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
     <script type="text/javascript" src="mainController.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.js"></script>
-
-    <div layout="column" layout-align="left" layout-margin ng-controller="mainController">
+    <script type="text/javascript" src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    
+    <div class="ct-chart ct-perfect-fourth"></div>
+ 
+    <div layout="row" layout-align="left" layout-margin ng-controller="mainController">
 	<div>
-	    <md-content>
-		<md-list>
-		    <md-list-item class="md-3-line" ng-repeat="fund in funds">
-			    <md-button class="md-primary" ng-click="setSelectedFund()">
-			    	{{fund.name}}
-			    </md-button>	
-			    <md-divider></md-divider>
-		    </md-list-item>
-		</md-list>
-	    </md-content>
+	    <md-list>
+		<md-list-item class="md-3-line" ng-repeat="fund in funds">
+		    <md-button class="md-primary" ng-click="setSelectedFund()">
+			 {{fund.name}}
+		    </md-button>	
+	            <md-divider></md-divider>
+		</md-list-item>
+	    </md-list>
+	    <md-button class="md-primary" ng-click="getPositionHistory()">
+		Click me!
+	    </md-button>
 	</div>
+	<div>
+		<div layout="row">
+	       	    <div class="padded">
+		        <h6>Current value</h6>
+		        <h4>{{selectedPosition.value | currency : "&euro; "}}</h4>
+		    </div>
+		    <div class="padded">
+			<h6>Current amount</h6>
+			<h4>{{selectedPosition.amount | number : 2}}</h4)}</h4>
+       		    </div>
+	        </div>
+	</div>
+    </div>
         <div>
 	    <md-content>
 		<md-list>
@@ -84,6 +108,5 @@
 	    </table>
 	    </td></table> 
 	</div>-->
-    </div>
     </body>
 </html>

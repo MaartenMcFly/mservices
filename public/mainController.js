@@ -51,31 +51,6 @@ myTodo.controller('mainController', function ($scope, $http) {
 	    console.log('Error: ' + data);
 	});
 
-    // when submitting the add form, send the text to the node API
-    $scope.createTodo = function() {
-        $http.post('/api/todos', $scope.formData)
-            .success(function(data) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.todos = data;
-                console.log(data);
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-
-    // delete a todo after checking it
-    $scope.deleteTodo = function(id) {
-        $http.delete('/api/todos/' + id)
-            .success(function(data) {
-                $scope.todos = data;
-                console.log(data);
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-
     $scope.getTransactionsForFund = function(fund) {
 	$http.get('/api/positions?fund_id=' + fund.fund_id)
 	    .success(function(data) {
@@ -87,7 +62,40 @@ myTodo.controller('mainController', function ($scope, $http) {
 		console.log('Error: ' + data);
 	    });
     }
-  
+ 
+    $scope.getPositionHistory = function() {
+	var pivotDate = new Date(2006,11,0);
+	var todate = new Date();
+	var positionArray = [];
+
+	calculate(pivotDate, todate, positionArray);
+    }
+ 
+    var calculate = function(date, today, positionArray) {
+	console.log('Calculate called with ' + date);
+	if (date < today) {
+	    todateString = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+	    querystring = '/api/positions?fund_id=' + $scope.selectedFund.orig_key + '&todate=' + todateString;
+	    $http.get(querystring)	
+		.success(function(data) {
+		    positionArray.push(data);
+		    console.log('In array: ' + positionArray.length);
+		    calculate(addDays(date, 7), today, positionArray);
+		})
+		.error(function(data) {
+		    console.log('Error: ' + data);
+		});
+	}
+	else {
+	    console.log('Data: ' + JSON.stringify(positionArray));
+	    return positionArray;
+	}
+    }
+
+    var addDays = function (someDate, days) {
+	return new Date(someDate.getTime() + days*24*60*60*1000);
+    }
+	
     $scope.setSelectedFund = function() {
 	$scope.selectedFund = this.fund;
         var position_id;
